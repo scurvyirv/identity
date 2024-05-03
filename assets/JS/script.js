@@ -14,10 +14,12 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
+    console.log(task);
     const taskCard = $('<div>')
         .addClass('card task-card draggable my-3')
         .attr('data-task-id', task.id);
     const cardHeader = $('<div>').addClass('card-header h4').text(task.title);
+    console.log(cardHeader);
     const cardBody = $('<div>').addClass('card-body');
     const cardDescription = $('<p>').addClass('card-text').text(task.description);
     const cardDueDate = $('<p>').addClass('card-text').text(task.date);
@@ -39,8 +41,12 @@ function createTaskCard(task) {
     }
 
     // ? Gather all the elements created above and append them to the correct elements.
-    cardBody.append(cardDescription, cardDueDate, cardDeleteBtn);
-    taskCard.append(cardHeader, cardBody);
+    taskCard.append(cardHeader);
+    taskCard.append(cardBody);
+    cardBody.append(cardDescription);
+    cardBody.append(cardDueDate);
+    cardBody.append(cardDeleteBtn);
+
 
     // ? Return the card so it can be appended to the correct lane.
     return taskCard;
@@ -62,17 +68,27 @@ function renderTaskList() {
     // Retrieve the entire task object from local storage
     const storedTask = JSON.parse(localStorage.getItem('tasks'));
 
+    //this for loop pulls from the object array, storedTask, which is in localStorage
+    for (i = 0; i < storedTask.length; i++) {
+        const taskCard = createTaskCard(storedTask[i]);
+        $('#todo-cards').append(taskCard);
+    }
+
+    // console.log (storedTask, 'yay'); //the console gives the correct object and properties
+    // console.log (typeof storedTask, 'is this an object:'); // console says its an object
     // Update the id property of the task object with the stored id
-    const task = {
-        id: storedTask.id,
-        title: storedTask.title,
-        description: storedTask.description,
-        date: storedTask.date
-    };
+    // const task = {
+    // id: storedTask[0].id,
+    // title: storedTask[0].title,
+    // description: storedTask[0].description,
+    // date: storedTask[0].date
+    // };
+    // console.log(task, 'yay'); //the console gives UNDEFINED properties for the object
+    // const taskCard = createTaskCard(task);
+    //this appends the card to the To-Do lane
+    // $('#todo-cards').append(taskCard);
 
-    const taskCard = createTaskCard(task);
-    $('#todo-cards').append(taskCard);
-
+    //this feature attempts to make card draggable
     $('.draggable').draggable({
         opacity: 0.7,
         zIndex: 100,
@@ -96,8 +112,7 @@ function handleAddTask(event) {
     //define variables within form to be targeted in HTML
     const taskTitle = document.querySelector('#task-title').value;
     const taskDueDate = document.querySelector('#task-due-date').value;
-    const taskDescription = document.querySelector
-        ('#task-description').value;
+    const taskDescription = document.querySelector('#task-description').value;
 
     //define object to be pushed into array 'taskList' 
     const newTask = {
@@ -135,7 +150,7 @@ function handleDeleteTask(event) {
         // Re-render the task list without the deleted task
         renderTaskList();
     }
-}
+};
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
