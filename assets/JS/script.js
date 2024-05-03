@@ -47,7 +47,6 @@ function createTaskCard(task) {
     cardBody.append(cardDueDate);
     cardBody.append(cardDeleteBtn);
 
-
     // ? Return the card so it can be appended to the correct lane.
     return taskCard;
 }
@@ -132,7 +131,7 @@ function handleAddTask(event) {
 
 };
 
-// Todo: create a function to handle deleting a task (EXPLAIN THIS)
+// ****Todo: create a function to handle deleting a task (USE JAVASCRIPT FILTER ARRAYS --EXPLAIN THIS)
 function handleDeleteTask(event) {
     // Get the task ID from the button's data attribute
     const taskId = $(this).attr('data-task-id');
@@ -152,14 +151,29 @@ function handleDeleteTask(event) {
     }
 };
 
-// Todo: create a function to handle dropping a task into a new status lane
+// ****Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
+    //pull from local storage (UNSURE)
+    const tasks = readTasksFromStorage();
+
+    //get project ID (UNSURE)
+    const columnName = ui.draggable[0].dataset.taskId;
+
+    //from TA
+    const 
+
 
 }
 
-// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// ****Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
     // Event listener for button click of SaveTask
     saveTask.addEventListener('click', handleAddTask);
+
+    // ? Make lanes droppable
+    $('.lane').droppable({
+        accept: '.draggable',
+        drop: handleDrop,
+    });
 
 });
